@@ -246,6 +246,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   justify-self:stretch;
 }
 .hero-visual img{object-fit:cover}
+/* picture 只做容器，撑满画框，让内部 img 的百分比尺寸有参照 */
+.visual picture{display:block;width:100%;height:100%}
 
 .visual-fallback{
   position:absolute;inset:0;
@@ -727,7 +729,10 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       </div>
 
       <div class="visual hero-visual" data-visual data-reveal>
-        <img src="assets/wifi10-hero.png" alt="Wi-Fi 10.0 生物感知场域概念图">
+        <picture>
+          <source srcset="assets/wifi10-hero.webp" type="image/webp">
+          <img src="assets/wifi10-hero.png" alt="Wi-Fi 10.0 生物感知场域概念图">
+        </picture>
         <div class="visual-fallback">
           <span class="visual-label">Wi-Fi 10.0</span>
           <span class="visual-spec">

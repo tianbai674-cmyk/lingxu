@@ -25,6 +25,7 @@ bash deploy-github.sh
 | 文件 | 用途 |
 | --- | --- |
 | `index.html` | 页面本体，样式与脚本内联 |
-| `assets/wifi10-hero.png` | 首屏概念图（2174×1320），页面按同比例画框完整显示 |
+| `assets/wifi10-hero.webp` | 首屏概念图，现代浏览器优先加载（220KB） |
+| `assets/wifi10-hero.png` | 同上，`<picture>` 的兜底源（4.5MB，仅在不支持 WebP 时加载） |
 | `serve.sh` | 本地静态服务 + 临时公网隧道 |
 | `deploy-github.sh` | 一键上传 GitHub 并开启 Pages |
