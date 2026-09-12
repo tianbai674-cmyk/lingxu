@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0a0b0d">
+<meta name="description" content="灵枢 · 源核 - 基于 Wi-Fi 10.0 生物感知与脑机接口的家族数字信托物理入口。">
+<title>灵枢 · 源核 | Wi-Fi 10.0 生物感知终端</title>
+
+<!--
+  设计说明
+  页面类型: 产品概念 / 商业方案单页（投资人与家族决策者阅读场景）
+  视觉语言: 冷调深色 + 单一青绿强调色 + 等宽技术标签 + 发丝分隔线
+  设计变量: DESIGN_VARIANCE 7 / MOTION_INTENSITY 5 / VISUAL_DENSITY 4
+  圆角系统: 全站统一 2px（仪器感，非消费级圆润）
+  主题: 深色锁定（本页为暗场科技方案，不做浅色反转）
+  图片: 概念渲染图尚未生成，视觉位为「诚实占位」，放入 assets/ 后自动替换
+-->
+
+<script>document.documentElement.classList.add('js');</script>
+
+<style>
+/* ---------- 令牌 ---------- */
+:root{
+  color-scheme: dark;
+
+  --bg:#0a0b0d;
+  --surface:#101216;
+  --surface-2:#15181c;
+
+  --line:rgba(232,236,240,.09);
+  --line-strong:rgba(232,236,240,.17);
+
+  --ink:#e8ebee;
+  --ink-2:#a2abb4;
+  --ink-3:#7b848d;
+
+  --accent:#3ad6c8;
+  --accent-ink:#062a27;
+  --accent-wash:rgba(58,214,200,.10);
+  --accent-line:rgba(58,214,200,.38);
+
+  --r:2px;
+  --shell:1400px;
+  --rail:210px;
+
+  --ease:cubic-bezier(.16,1,.3,1);
+
+  --f-sans:"SF Pro Display",system-ui,-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  --f-mono:"SF Mono",ui-monospace,"JetBrains Mono",Menlo,Consolas,monospace;
+}
+
+/* ---------- 基础 ---------- */
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--f-sans);
+  font-size:16px;
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+/* 极轻的顶光，制造纵深，不参与滚动重绘 */
+body::before{
+  content:"";
+  position:fixed;inset:0;
+  pointer-events:none;
+  z-index:0;
+  background:
+    radial-gradient(900px 480px at 78% -8%,rgba(58,214,200,.075),transparent 70%),
+    radial-gradient(700px 420px at 8% 6%,rgba(255,255,255,.035),transparent 72%);
+}
+
+h1,h2,h3,h4{margin:0;font-weight:500;letter-spacing:-.01em}
+p{margin:0}
+ul,ol{margin:0;padding:0;list-style:none}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+
+:focus-visible{
+  outline:1px solid var(--accent);
+  outline-offset:3px;
+  border-radius:var(--r);
+}
+
+::selection{background:var(--accent);color:var(--accent-ink)}
+
+.mono{
+  font-family:var(--f-mono);
+  font-size:.6875rem;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--ink-3);
+}
+.rule{height:1px;background:var(--line);border:0;margin:0}
+.shell{
+  width:100%;
+  max-width:var(--shell);
+  margin:0 auto;
+  padding:0 48px;
+  position:relative;
+  z-index:1;
+}
+
+/* ---------- 顶部导航 ---------- */
+.nav{
+  position:sticky;top:0;z-index:20;
+  height:64px;
+  background:rgba(10,11,13,.82);
+  backdrop-filter:blur(14px) saturate(150%);
+  -webkit-backdrop-filter:blur(14px) saturate(150%);
+  border-bottom:1px solid var(--line);
+}
+@media (prefers-reduced-transparency:reduce){
+  .nav{background:var(--bg);backdrop-filter:none;-webkit-backdrop-filter:none}
+}
+.nav-in{
+  height:100%;
+  display:flex;align-items:center;gap:28px;
+}
+.brand{
+  display:flex;align-items:center;gap:10px;
+  font-size:.9375rem;letter-spacing:.14em;
+  white-space:nowrap;
+}
+.brand svg{width:20px;height:20px;color:var(--accent);flex:none}
+.brand b{font-weight:500;letter-spacing:.12em}
+
+.nav-links{
+  display:flex;align-items:center;gap:4px;
+  margin-left:auto;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-links a{
+  display:block;
+  padding:8px 12px;
+  font-size:.8125rem;
+  color:var(--ink-2);
+  white-space:nowrap;
+  border-radius:var(--r);
+  transition:color .2s var(--ease),background-color .2s var(--ease);
+}
+.nav-links a:hover{color:var(--ink);background:rgba(255,255,255,.04)}
+.nav-links a[aria-current="true"]{color:var(--accent)}
+
+.progress{
+  position:absolute;left:0;right:0;bottom:-1px;height:1px;
+  transform:scaleX(0);transform-origin:0 50%;
+  background:var(--accent);
+}
+@supports (animation-timeline:scroll()){
+  .progress{
+    animation:progress-grow linear;
+    animation-timeline:scroll(root block);
+  }
+}
+@keyframes progress-grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+/* ---------- 首屏 ---------- */
+.hero{padding:60px 0 64px}
+.hero-in{
+  display:grid;
+  grid-template-columns:minmax(0,1.06fr) minmax(0,.86fr);
+  gap:72px;
+  align-items:center;
+}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--f-mono);
+  font-size:.6875rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--accent);
+}
+.eyebrow::before{content:"";width:22px;height:1px;background:var(--accent-line)}
+
+.hero h1{
+  margin:22px 0 0;
+  font-size:clamp(2.6rem,5.4vw,4.25rem);
+  line-height:1.04;
+  letter-spacing:-.02em;
+  font-weight:500;
+}
+.hero h1 em{
+  font-style:normal;
+  font-weight:400;
+  color:var(--accent);
+}
+.hero h1 .dot{
+  color:var(--ink-3);
+  font-weight:300;
+  padding:0 .06em;
+}
+.hero-sub{
+  margin-top:24px;
+  max-width:34ch;
+  font-size:1.0625rem;
+  line-height:1.75;
+  color:var(--ink-2);
+}
+.hero-meta{
+  margin-top:34px;
+  display:flex;flex-wrap:wrap;align-items:center;gap:20px;
+}
+.btn{
+  display:inline-flex;align-items:center;gap:9px;
+  height:46px;padding:0 22px;
+  border-radius:var(--r);
+  font-size:.875rem;font-weight:500;letter-spacing:.02em;
+  white-space:nowrap;
+  transition:transform .18s var(--ease),background-color .18s var(--ease),border-color .18s var(--ease),color .18s var(--ease);
+}
+.btn-primary{background:var(--accent);color:var(--accent-ink)}
+.btn-primary:hover{background:#54e3d6}
+.btn-primary:active{transform:translateY(1px)}
+.btn-ghost{border:1px solid var(--line-strong);color:var(--ink-2)}
+.btn-ghost:hover{border-color:var(--accent-line);color:var(--ink)}
+.btn-ghost:active{transform:translateY(1px)}
+
+/* ---------- 视觉位（诚实占位） ---------- */
+.visual{
+  position:relative;
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  background:
+    radial-gradient(120% 90% at 50% 8%,rgba(58,214,200,.07),transparent 62%),
+    var(--surface);
+  overflow:hidden;
+  width:100%;
+}
+.visual img{display:none;width:100%;height:100%;object-fit:cover}
+.visual.has-image img{display:block}
+.visual.has-image .visual-fallback{display:none}
+
+.hero-visual{
+  height:min(70vh,640px);
+  width:auto;
+  max-width:100%;
+  aspect-ratio:4/5;
+  justify-self:end;
+}
+
+.visual-fallback{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:18px;
+  padding:28px;
+  text-align:center;
+  background-image:
+    linear-gradient(var(--line) 1px,transparent 1px),
+    linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:56px 56px;
+  background-position:center;
+}
+.visual-fallback::before{
+  content:"";
+  position:absolute;
+  width:38%;aspect-ratio:1;
+  border:1px solid var(--accent-line);
+  transform:rotate(45deg);
+}
+.visual-fallback::after{
+  content:"";
+  position:absolute;
+  width:58%;aspect-ratio:1;
+  border:1px dashed rgba(232,236,240,.14);
+  border-radius:50%;
+}
+.visual-fallback .visual-label{
+  position:relative;z-index:1;
+  font-family:var(--f-mono);
+  font-size:.6875rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--accent);
+}
+.visual-fallback .visual-spec{
+  position:relative;z-index:1;
+  max-width:30ch;
+  font-family:var(--f-mono);
+  font-size:.625rem;letter-spacing:.08em;
+  line-height:1.9;
+  color:var(--ink-3);
+}
+
+/* ---------- 章节骨架 ---------- */
+.section{
+  padding:88px 0;
+  border-top:1px solid var(--line);
+  position:relative;
+  scroll-margin-top:80px;
+}
+.section-grid{
+  display:grid;
+  grid-template-columns:var(--rail) minmax(0,1fr);
+  gap:56px;
+}
+.rail{position:sticky;top:96px;align-self:start}
+.rail h2{
+  font-size:1.125rem;
+  line-height:1.5;
+  letter-spacing:.02em;
+}
+.rail .rail-en{
+  display:block;
+  margin-top:8px;
+  padding-top:12px;
+  border-top:1px solid var(--line);
+  font-family:var(--f-mono);
+  font-size:.625rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--ink-3);
+}
+.body{max-width:none}
+
+/* ---------- 01 市场细分 ---------- */
+.lead{
+  font-size:clamp(1.4rem,2.3vw,1.9rem);
+  line-height:1.6;
+  letter-spacing:-.005em;
+  color:var(--ink);
+}
+.lead mark{
+  background:none;color:var(--accent);
+}
+.para{
+  margin-top:26px;
+  font-size:1.0625rem;
+  line-height:1.85;
+  color:var(--ink-2);
+  max-width:62ch;
+}
+.para strong{color:var(--ink);font-weight:500}
+
+.subgrid{
+  margin-top:52px;
+  border-top:1px solid var(--line);
+}
+.subgrid .sub-item{
+  display:grid;
+  grid-template-columns:34px minmax(0,1fr) auto;
+  align-items:baseline;
+  gap:16px;
+  padding:20px 0;
+  border-bottom:1px solid var(--line);
+}
+.subgrid .idx{
+  display:block;
+  width:18px;height:1px;
+  background:var(--accent);
+  transform:translateY(-4px);
+}
+.subgrid .sub-name{font-size:1.0625rem;color:var(--ink)}
+.subgrid .sub-note{font-size:.875rem;color:var(--ink-3);text-align:right}
+
+/* ---------- 02 目标人群 ---------- */
+.split-compare{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 1px minmax(0,1fr);
+  gap:0;
+  margin-top:44px;
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  background:var(--surface);
+}
+.compare-side{padding:34px 32px 36px}
+.compare-side .who{
+  font-family:var(--f-mono);
+  font-size:.625rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--ink-3);
+}
+.compare-side .role{
+  margin-top:14px;
+  font-size:1.375rem;
+  letter-spacing:.01em;
+}
+.compare-side .role span{
+  display:block;
+  margin-top:6px;
+  font-size:.875rem;
+  color:var(--ink-3);
+  letter-spacing:0;
+}
+.compare-side p{
+  margin-top:20px;
+  font-size:1rem;
+  line-height:1.85;
+  color:var(--ink-2);
+}
+.compare-side .need{
+  margin-top:22px;
+  padding-top:18px;
+  border-top:1px solid var(--line);
+  font-size:.875rem;
+  color:var(--ink-2);
+}
+.compare-side .need b{color:var(--accent);font-weight:500}
+.compare-axis{
+  position:relative;
+  background:var(--line);
+}
+.compare-axis span{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  padding:10px 6px;
+  background:var(--bg);
+  font-family:var(--f-mono);
+  font-size:.625rem;
+  letter-spacing:.28em;
+  color:var(--accent);
+  writing-mode:vertical-rl;
+  text-orientation:upright;
+}
+
+/* ---------- 03 产品定位 ---------- */
+.statement{padding:8px 0 0}
+.statement h3{
+  font-size:clamp(1.75rem,3.4vw,2.75rem);
+  line-height:1.35;
+  letter-spacing:-.01em;
+  max-width:22ch;
+}
+.statement h3 .hl{color:var(--accent)}
+.statement .para{margin-top:30px}
+.chips{
+  display:flex;flex-wrap:wrap;gap:10px;
+  margin-top:40px;
+  padding-top:28px;
+  border-top:1px solid var(--line);
+}
+.chip{
+  display:inline-flex;align-items:center;gap:8px;
+  height:36px;padding:0 16px;
+  border:1px solid var(--line-strong);
+  border-radius:var(--r);
+  font-size:.875rem;color:var(--ink-2);
+}
+.chip::before{
+  content:"";width:5px;height:5px;flex:none;
+  background:var(--accent);
+}
+
+/* ---------- 04 产品构想 / 信号链路 ---------- */
+.chain{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:0 26px;
+  margin-top:46px;
+  border-top:1px solid var(--line-strong);
+}
+.chain-step{
+  position:relative;
+  padding:28px 0 0;
+}
+.chain-step::before{
+  content:"";position:absolute;top:0;left:0;
+  width:1px;height:28px;background:var(--accent-line);
+}
+.chain-step::after{
+  content:"";position:absolute;top:-3px;left:-3px;
+  width:7px;height:7px;background:var(--accent);
+}
+.step-name{
+  display:block;
+  font-size:1.0625rem;
+  color:var(--ink);
+  letter-spacing:.01em;
+}
+.step-desc{
+  display:block;
+  margin-top:10px;
+  font-size:.9375rem;
+  line-height:1.8;
+  color:var(--ink-3);
+}
+.js .chain .chain-step:nth-child(2){--d:70ms}
+.js .chain .chain-step:nth-child(3){--d:140ms}
+.js .chain .chain-step:nth-child(4){--d:210ms}
+
+/* ---------- 05 核心功能 Bento ---------- */
+.bento{
+  display:grid;
+  grid-template-columns:repeat(12,minmax(0,1fr));
+  gap:12px;
+}
+.cell{
+  grid-column:span 6;
+  position:relative;
+  padding:30px 30px 32px;
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  background:var(--surface);
+  overflow:hidden;
+  transition:border-color .25s var(--ease),transform .25s var(--ease);
+}
+.cell:hover{border-color:var(--line-strong);transform:translateY(-2px)}
+.cell-c1{grid-column:span 7}
+.cell-c2{grid-column:span 5}
+.cell-c3{grid-column:span 5}
+.cell-c4{grid-column:span 7}
+.cell-c5{grid-column:span 12}
+
+.cell h3{
+  font-size:1.1875rem;
+  letter-spacing:.01em;
+  display:flex;align-items:baseline;gap:12px;
+}
+.cell h3 .tag{
+  font-family:var(--f-mono);
+  font-size:.625rem;letter-spacing:.16em;
+  color:var(--ink-3);
+}
+.cell p{
+  margin-top:16px;
+  font-size:.9375rem;
+  line-height:1.85;
+  color:var(--ink-2);
+  max-width:56ch;
+}
+.cell p b{color:var(--ink);font-weight:500}
+
+/* c1 视觉变化：网格底纹 + 雷达 */
+.cell-c1{
+  background-image:
+    linear-gradient(var(--line) 1px,transparent 1px),
+    linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:44px 44px;
+  background-position:right -1px top -1px;
+}
+.cell-c1 .cell-inner{position:relative;z-index:1;max-width:38ch}
+.radar{
+  position:absolute;right:-26px;bottom:-30px;
+  width:190px;height:190px;
+  color:var(--accent);
+  opacity:.5;
+  pointer-events:none;
+}
+.radar .sweep-line{transform-box:view-box;transform-origin:60px 60px}
+
+/* c4 视觉变化：强调色淡染 */
+.cell-c4{
+  background-image:linear-gradient(135deg,var(--accent-wash),transparent 58%);
+}
+/* c5 视觉变化：整条强调带 */
+.cell-c5{
+  border-left:2px solid var(--accent-line);
+  background-image:linear-gradient(90deg,var(--accent-wash),transparent 46%);
+}
+.cell-c5 .cell-wide{
+  display:grid;
+  grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);
+  gap:16px 48px;
+  align-items:start;
+}
+.cell-c5 p{margin-top:0;max-width:60ch}
+
+/* ---------- 06 概念视觉与提示词 ---------- */
+.visual-layout{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);
+  gap:28px;
+  align-items:start;
+}
+.visual-layout .visual{aspect-ratio:3/2}
+.prompt{
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  background:var(--surface-2);
+  overflow:hidden;
+}
+.prompt-head{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 18px;
+  border-bottom:1px solid var(--line);
+}
+.prompt-head .file{
+  font-family:var(--f-mono);
+  font-size:.6875rem;letter-spacing:.1em;
+  color:var(--ink-2);
+}
+.prompt-head .btn-copy{
+  margin-left:auto;
+  display:inline-flex;align-items:center;gap:8px;
+  height:32px;padding:0 14px;
+  border:1px solid var(--line-strong);
+  border-radius:var(--r);
+  font-family:var(--f-mono);
+  font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-2);
+  transition:border-color .2s var(--ease),color .2s var(--ease),background-color .2s var(--ease);
+}
+.prompt-head .btn-copy:hover{border-color:var(--accent-line);color:var(--ink)}
+.prompt-head .btn-copy:active{transform:translateY(1px)}
+.prompt-head .btn-copy[data-state="done"]{
+  border-color:var(--accent-line);
+  background:var(--accent-wash);
+  color:var(--accent);
+}
+.prompt pre{
+  margin:0;
+  padding:20px 22px 24px;
+  font-family:var(--f-mono);
+  font-size:.8125rem;
+  line-height:1.85;
+  color:#b9c6c4;
+  white-space:pre-wrap;
+  word-break:break-word;
+  max-height:340px;
+  overflow:auto;
+}
+.prompt-notes{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:0;
+  margin-top:30px;
+  border-top:1px solid var(--line);
+}
+.prompt-notes > div{padding:18px 26px 0 0}
+.prompt-notes > div + div{border-left:1px solid var(--line);padding-left:26px}
+.prompt-notes dt{
+  font-family:var(--f-mono);
+  font-size:.625rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-3);
+}
+.prompt-notes dd{
+  margin:8px 0 0;
+  font-size:.9375rem;
+  color:var(--ink-2);
+}
+
+/* ---------- 页脚 ---------- */
+.foot{
+  border-top:1px solid var(--line);
+  padding:44px 0 56px;
+}
+.foot-in{
+  display:flex;flex-wrap:wrap;gap:20px 40px;
+  align-items:flex-end;justify-content:space-between;
+}
+.foot .brand{margin-bottom:14px}
+.foot p{
+  font-size:.875rem;
+  color:var(--ink-3);
+  max-width:48ch;
+}
+.foot .mono{text-align:right}
+
+/* ---------- 入场动效 ---------- */
+.js [data-reveal]{
+  opacity:0;
+  transform:translateY(16px);
+}
+.js [data-reveal].is-in{
+  opacity:1;
+  transform:none;
+  transition:opacity .7s var(--ease),transform .7s var(--ease);
+  transition-delay:var(--d,0ms);
+}
+.js .hero [data-reveal]:nth-child(1){--d:40ms}
+.js .hero [data-reveal]:nth-child(2){--d:110ms}
+.js .hero [data-reveal]:nth-child(3){--d:180ms}
+.js .hero [data-reveal]:nth-child(4){--d:250ms}
+.js .hero [data-reveal]:nth-child(5){--d:320ms}
+
+@keyframes sweep{to{transform:rotate(360deg)}}
+
+@media (prefers-reduced-motion:no-preference){
+  .radar .sweep-line{
+    animation:sweep 4.5s linear infinite;
+  }
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .js [data-reveal]{opacity:1;transform:none}
+  .progress{animation:none;opacity:0}
+  .cell:hover{transform:none}
+}
+
+/* ---------- 响应式 ---------- */
+@media (max-width:1100px){
+  :root{--rail:170px}
+  .shell{padding:0 32px}
+  .section-grid{gap:40px}
+  .hero-in{grid-template-columns:minmax(0,1fr) minmax(0,.82fr)}
+  .hero-in{gap:48px}
+  .hero-visual{height:min(58vh,520px)}
+}
+
+@media (max-width:900px){
+  .shell{padding:0 24px}
+  .nav{height:58px}
+  .nav-links{gap:0}
+  .nav-links a{padding:8px 10px;font-size:.78125rem}
+
+  .hero{padding:52px 0 56px}
+  .hero-in{
+    grid-template-columns:minmax(0,1fr);
+    gap:40px;
+  }
+  .hero-visual{
+    height:auto;
+    width:100%;
+    aspect-ratio:4/5;
+    justify-self:stretch;
+  }
+
+  .section{padding:64px 0}
+  .section-grid{
+    grid-template-columns:minmax(0,1fr);
+    gap:28px;
+  }
+  .rail{position:static}
+  .body{max-width:none}
+
+  .subgrid .sub-item{grid-template-columns:28px minmax(0,1fr);gap:12px}
+  .subgrid .sub-note{grid-column:2;text-align:left;margin-top:4px}
+
+  .split-compare{
+    grid-template-columns:minmax(0,1fr);
+    gap:0;
+  }
+  .compare-axis{height:1px}
+  .compare-axis span{
+    writing-mode:horizontal-tb;
+    letter-spacing:.3em;
+    padding:0 12px;
+  }
+
+  .visual-layout{grid-template-columns:minmax(0,1fr)}
+  .visual-layout .visual{aspect-ratio:4/3}
+
+  .chain{
+    grid-template-columns:minmax(0,1fr);
+    gap:0;
+    border-top:0;
+  }
+  .chain-step{
+    padding:20px 0 20px 22px;
+    border-left:1px solid var(--accent-line);
+  }
+  .chain-step::before{display:none}
+  .chain-step::after{top:30px;left:-3px}
+
+  .prompt-notes{grid-template-columns:minmax(0,1fr)}
+  .prompt-notes > div{padding:18px 0 0}
+  .prompt-notes > div + div{
+    border-left:0;
+    border-top:1px solid var(--line);
+    padding-left:0;
+    margin-top:18px;
+  }
+
+  .cell,
+  .cell-c1,.cell-c2,.cell-c3,.cell-c4,.cell-c5{grid-column:span 12}
+  .cell-c5 .cell-wide{grid-template-columns:minmax(0,1fr);gap:14px}
+  .radar{opacity:.32;width:150px;height:150px}
+}
+
+@media (max-width:640px){
+  .shell{padding:0 18px}
+  .hero h1{font-size:clamp(2.1rem,9vw,2.8rem)}
+  .brand b{display:none}
+  .section{padding:56px 0}
+  .cell{padding:24px 22px 26px}
+  .compare-side{padding:28px 22px 30px}
+  .foot-in{align-items:flex-start}
+  .foot .mono{text-align:left}
+}
+</style>
+</head>
+
+<body>
+
+<!-- ============ 导航 ============ -->
+<header class="nav">
+  <div class="shell nav-in">
+    <a class="brand" href="#top" aria-label="灵枢 · 源核 回到顶部">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="6.1" y="6.1" width="11.8" height="11.8" transform="rotate(45 12 12)"
+              fill="none" stroke="currentColor" stroke-width="1.2"/>
+        <circle cx="12" cy="12" r="2" fill="currentColor"/>
+      </svg>
+      <b>灵枢 · 源核</b>
+    </a>
+    <nav class="nav-links" aria-label="章节导航">
+      <a href="#market">市场细分</a>
+      <a href="#audience">目标人群</a>
+      <a href="#positioning">产品定位</a>
+      <a href="#vision">产品构想</a>
+      <a href="#features">核心功能</a>
+      <a href="#visual">概念视觉</a>
+    </nav>
+  </div>
+  <div class="progress" aria-hidden="true"></div>
+</header>
+
+<main id="top">
+
+  <!-- ============ 首屏 ============ -->
+  <section class="hero">
+    <div class="shell hero-in">
+      <div>
+        <span class="eyebrow" data-reveal>Neuro-Genesis / Wi-Fi 10.0</span>
+        <h1 data-reveal>灵枢<span class="dot">·</span><em>源核</em></h1>
+        <p class="hero-sub" data-reveal>
+          以 Wi-Fi 10.0 生物感知与脑机接口，为家族大宅提供无感的生命守护与精神资产沉淀。
+        </p>
+        <div class="hero-meta" data-reveal>
+          <a class="btn btn-primary" href="#market">阅读方案全文</a>
+        </div>
+      </div>
+
+      <div class="visual hero-visual" data-visual data-reveal>
+        <img src="assets/lingxu-hero.jpg" alt="灵枢单体悬浮终端概念渲染图">
+        <div class="visual-fallback">
+          <span class="visual-label">Concept Render</span>
+          <span class="visual-spec">
+            概念渲染图待生成<br>
+            ASSET 4:5 / assets/lingxu-hero.jpg
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 01 市场细分 ============ -->
+  <section class="section" id="market">
+    <div class="shell section-grid">
+      <div class="rail" data-reveal>
+        <h2>市场细分</h2>
+        <span class="rail-en">Market Segmentation</span>
+      </div>
+      <div class="body">
+        <p class="lead" data-reveal>
+          深耕于<mark>新银发经济</mark>与<mark>家族财富管理</mark>的黄金交汇处。
+        </p>
+        <p class="para" data-reveal>
+          彻底切断低端适老化硬件的价格战，开辟「高净值私域康养与家族精神资产数字化」的全新顶级赛道。细分领域涵盖以下三条支线。
+        </p>
+
+        <div class="subgrid">
+          <div class="sub-item" data-reveal>
+            <span class="idx" aria-hidden="true"></span>
+            <span class="sub-name">无感生命体征监测</span>
+            <span class="sub-note">呼吸 / 心率 / 跌倒 / 心梗预警</span>
+          </div>
+          <div class="sub-item" data-reveal>
+            <span class="idx" aria-hidden="true"></span>
+            <span class="sub-name">跨代际脑机神经交互</span>
+            <span class="sub-note">非侵入式 BCI 智性陪伴</span>
+          </div>
+          <div class="sub-item" data-reveal>
+            <span class="idx" aria-hidden="true"></span>
+            <span class="sub-name">家族智囊服务</span>
+            <span class="sub-note">基于顶级大模型的私有推理</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 02 目标人群 ============ -->
+  <section class="section" id="audience">
+    <div class="shell section-grid">
+      <div class="rail" data-reveal>
+        <h2>目标人群</h2>
+        <span class="rail-en">Target Audience</span>
+      </div>
+      <div class="body">
+        <p class="lead" data-reveal>
+          瞄准中国及全球的<mark>新银发富裕层（UHNWI）</mark>及其家族管理者。
+        </p>
+        <p class="para" data-reveal>
+          他们不仅面临极高的「失能导致家族失控」风险，且具有严重的「买用分离」痛点：决策的人不用，用的人不选。
+        </p>
+
+        <div class="split-compare" data-reveal>
+          <div class="compare-side">
+            <span class="who">Payer / 买单者</span>
+            <h3 class="role">创二代 与 家族办公室<span>为结果付费，不为设备付费</span></h3>
+            <p>极度缺乏时间，但对长者健康底线有极强的「数据掌控与兜底救援」刚需。</p>
+            <p class="need">核心诉求：<b>可远程掌握的健康数据与确定性救援</b></p>
+          </div>
+          <div class="compare-axis" aria-hidden="true"><span>买用分离</span></div>
+          <div class="compare-side">
+            <span class="who">User / 使用者</span>
+            <h3 class="role">银发富一代<span>为尊严买单，拒绝被监控</span></h3>
+            <p>极度排斥监控镜头与复杂设备，渴望保护隐私、维持智性尊严，并延续在家族中的精神影响力。</p>
+            <p class="need">核心诉求：<b>无感、无形，且能留下精神资产</b></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 03 产品定位 ============ -->
+  <section class="section" id="positioning">
+    <div class="shell section-grid">
+      <div class="rail" data-reveal>
+        <h2>产品定位</h2>
+        <span class="rail-en">Product Positioning</span>
+      </div>
+      <div class="body statement">
+        <h3 data-reveal>
+          全球首款基于 Wi-Fi 10.0 通信与空间场域技术的<span class="hl">「家族数字信托物理入口」</span>。
+        </h3>
+        <p class="para" data-reveal>
+          它不是家用电器，而是一件隐形的「生命黑匣子」与「镇宅艺术品」。它以无声、无形、无感的姿态，成为家族大宅中的终极生命与精神中枢。
+        </p>
+        <div class="chips" data-reveal>
+          <span class="chip">生命黑匣子</span>
+          <span class="chip">镇宅艺术品</span>
+          <span class="chip">家族生命与精神中枢</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 04 产品构想 ============ -->
+  <section class="section" id="vision">
+    <div class="shell section-grid">
+      <div class="rail" data-reveal>
+        <h2>产品构想</h2>
+        <span class="rail-en">Product Vision</span>
+      </div>
+      <div class="body">
+        <p class="lead" data-reveal>
+          把复杂的传感器阵列，极致收敛为一个<mark>单体悬浮终端</mark>。
+        </p>
+        <p class="para" data-reveal>
+          依托未来 Wi-Fi 10.0 极高频微波的物理穿透与精准回弹特性，「灵枢」通电后即在全屋生成一个高分辨率生物磁场。无需佩戴任何设备，终端即可直接扫描环境内的脑电波放电与血流微波。它将不可见的网络升级为「活体感知网络」，让长者的生命数据、情绪波动与高端救援服务、信托资产拨付实现毫秒级绑定。
+        </p>
+
+        <ol class="chain">
+          <li class="chain-step" data-reveal>
+            <span class="step-name">极高频微波</span>
+            <span class="step-desc">Wi-Fi 10.0 频段的物理穿透与回弹，无需摄像头即可穿过墙体。</span>
+          </li>
+          <li class="chain-step" data-reveal>
+            <span class="step-name">全屋生物磁场</span>
+            <span class="step-desc">通电即生成高分辨率场域，覆盖大宅的每一个生活动线。</span>
+          </li>
+          <li class="chain-step" data-reveal>
+            <span class="step-name">活体感知网络</span>
+            <span class="step-desc">直接读取呼吸、心率、脑电与血流微波，长者无需佩戴任何设备。</span>
+          </li>
+          <li class="chain-step" data-reveal>
+            <span class="step-name">资产与救援绑定</span>
+            <span class="step-desc">生命数据与家族救援链路、信托资产拨付在同一毫秒级通路上联动。</span>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 05 核心功能 ============ -->
+  <section class="section" id="features">
+    <div class="shell section-grid">
+      <div class="rail" data-reveal>
+        <h2>核心功能</h2>
+        <span class="rail-en">Core Features</span>
+      </div>
+      <div class="body" style="max-width:none">
+        <div class="bento">
+
+          <article class="cell cell-c1" data-reveal>
+            <svg class="radar" viewBox="0 0 120 120" aria-hidden="true">
+              <g fill="none" stroke="currentColor" stroke-width="1">
+                <circle cx="60" cy="60" r="15" opacity=".55"/>
+                <circle cx="60" cy="60" r="31" opacity=".34"/>
+                <circle cx="60" cy="60" r="47" opacity=".16"/>
+              </g>
+              <g class="sweep-line" fill="none" stroke="currentColor" stroke-width="1" opacity=".9">
+                <line x1="60" y1="60" x2="60" y2="13"/>
+              </g>
+            </svg>
+            <div class="cell-inner">
+              <h3>全域暗物质雷达 <span class="tag">Radar</span></h3>
+              <p>基于 Wi-Fi 10.0 的亚毫米级分辨率，在无摄像头的前提下，实现穿墙级的呼吸、心率、防跌倒及心梗早期预警监测，捍卫长者绝对隐私。</p>
+            </div>
+          </article>
+
+          <article class="cell cell-c2" data-reveal>
+            <h3>高维智性精神共鸣 <span class="tag">BCI</span></h3>
+            <p>通过非侵入式脑机接口（BCI），深度融合最强逻辑推理大模型，为长者提供商业趋势分析、时事探讨等智性陪伴，抚平精神孤岛。</p>
+          </article>
+
+          <article class="cell cell-c3" data-reveal>
+            <h3>家族精神资产库 <span class="tag">Archive</span></h3>
+            <p>借鉴分布式版本控制逻辑，在日常高维交互中自动沉淀、编译长者的商业哲学与人生阅历，生成可供后代查询的「家族智慧代码库」。</p>
+          </article>
+
+          <article class="cell cell-c4" data-reveal>
+            <h3>现场文娱自动调度 <span class="tag">Scheduling</span></h3>
+            <p>精准感知长者活力诉求，跨界直连顶级私域票务网络，自动锁定全球顶级演艺与体育赛事稀缺席位，并统筹私人医护出行。</p>
+          </article>
+
+          <article class="cell cell-c5" data-reveal>
+            <div class="cell-wide">
+              <h3>端到端特需救援闭环 <span class="tag">Emergency</span></h3>
+              <p>一旦捕捉到脑卒中或心脏停搏的极高危信号，直接绕过人工网络，秒级触发家族大额医疗备用金，并全自动呼叫专属直升机与私人全科医生上门。</p>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 06 概念视觉与提示词 ============ -->
+  <section class="section" id="visual">
+    <div class="shell section-grid">
+      <div class="rail" data-reveal>
+        <h2>概念视觉</h2>
+        <span class="rail-en">Concept &amp; Prompt</span>
+      </div>
+      <div class="body" style="max-width:none">
+        <span class="eyebrow" data-reveal>AI Render Prompt</span>
+        <p class="para" style="margin-top:18px" data-reveal>
+          以下提示词可直接用于 Midjourney、DALL·E 或方舟生图模型，用于生成终端与场景的概念渲染图。
+        </p>
+
+        <div class="visual-layout" style="margin-top:32px">
+          <div class="visual" data-visual data-reveal>
+            <img src="assets/lingxu-desk.jpg" alt="灵枢终端置于深色胡桃木书桌的场景概念渲染图">
+            <div class="visual-fallback">
+              <span class="visual-label">Scene Render</span>
+              <span class="visual-spec">
+                场景渲染图待生成<br>
+                ASSET 3:2 / assets/lingxu-desk.jpg
+              </span>
+            </div>
+          </div>
+
+          <div class="prompt" data-reveal>
+            <div class="prompt-head">
+              <span class="file">prompt.txt</span>
+              <button class="btn-copy" type="button" data-copy="#prompt-text">
+                <span data-copy-label>复制提示词</span>
+              </button>
+            </div>
+<pre id="prompt-text">A hyper-realistic futuristic tech product photography. A luxurious levitating single-unit terminal acting as a Wi-Fi 10.0 biological radar and BCI home hub. Placed on a premium dark walnut wood desk in a high-end minimalist study room. The terminal is a sleek, seamless titanium and obsidian floating geometric core, emitting a soft, subtle cyan holographic bioluminescent aura. No screens, no visible buttons, absolute smooth surface. Cinematic lighting, global illumination, 8k resolution, elegant, ultra-high net worth luxury aesthetic, cyberpunk meets Zen minimalism, architectural digest style. --ar 4:5 --v 6.0 --style raw</pre>
+          </div>
+        </div>
+
+        <dl class="prompt-notes" data-reveal>
+          <div>
+            <dt>画面主体</dt>
+            <dd>单体悬浮终端，无缝钛金属与黑曜石几何核心</dd>
+          </div>
+          <div>
+            <dt>使用场景</dt>
+            <dd>高端极简书房，深色胡桃木书桌</dd>
+          </div>
+          <div>
+            <dt>输出规格</dt>
+            <dd>4:5 竖幅，8K 级细节，青绿冷光氛围</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ 页脚 ============ -->
+<footer class="foot">
+  <div class="shell foot-in">
+    <div>
+      <div class="brand">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="6.1" y="6.1" width="11.8" height="11.8" transform="rotate(45 12 12)"
+                fill="none" stroke="currentColor" stroke-width="1.2"/>
+          <circle cx="12" cy="12" r="2" fill="currentColor"/>
+        </svg>
+        <b>灵枢 · 源核</b>
+      </div>
+      <p>Wi-Fi 10.0 生物感知与脑机接口终端。本页为产品概念与商业方案说明，视觉部分为待生成占位。</p>
+    </div>
+    <span class="mono">Neuro-Genesis / Wi-Fi 10.0</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  /* 视觉位：图片存在则替换占位，缺失则保留诚实占位 */
+  document.querySelectorAll('[data-visual]').forEach(function (slot) {
+    var img = slot.querySelector('img');
+    if (!img) return;
+    var ok = function () { slot.classList.add('has-image'); };
+    var fail = function () { img.remove(); slot.classList.add('is-missing'); };
+    img.addEventListener('load', ok);
+    img.addEventListener('error', fail);
+    if (img.complete) { img.naturalWidth > 0 ? ok() : fail(); }
+  });
+
+  /* 滚动入场：按阅读顺序逐块出现 */
+  var revealTargets = document.querySelectorAll('[data-reveal]');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-in');
+        io.unobserve(entry.target);
+      });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.08 });
+    revealTargets.forEach(function (el) { io.observe(el); });
+  } else {
+    revealTargets.forEach(function (el) { el.classList.add('is-in'); });
+  }
+  /* 兜底：任何情况下首屏内容都不会因为观察器未回调而空白 */
+  window.setTimeout(function () {
+    var vh = window.innerHeight || 800;
+    revealTargets.forEach(function (el) {
+      if (el.classList.contains('is-in')) return;
+      var r = el.getBoundingClientRect();
+      if (r.top < vh && r.bottom > 0) el.classList.add('is-in');
+    });
+  }, 1200);
+
+  /* 导航定位：标记当前章节 */
+  var sections = document.querySelectorAll('main .section[id]');
+  var links = {};
+  document.querySelectorAll('.nav-links a').forEach(function (a) {
+    links[a.getAttribute('href').slice(1)] = a;
+  });
+  if ('IntersectionObserver' in window && sections.length) {
+    var navIo = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        var link = links[entry.target.id];
+        if (!link) return;
+        if (entry.isIntersecting) {
+          Object.keys(links).forEach(function (k) { links[k].removeAttribute('aria-current'); });
+          link.setAttribute('aria-current', 'true');
+        }
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    sections.forEach(function (s) { navIo.observe(s); });
+  }
+
+  /* 复制提示词 */
+  document.querySelectorAll('[data-copy]').forEach(function (btn) {
+    var label = btn.querySelector('[data-copy-label]');
+    btn.addEventListener('click', function () {
+      var src = document.querySelector(btn.dataset.copy);
+      if (!src) return;
+      var text = src.textContent.trim();
+      var done = function () {
+        btn.dataset.state = 'done';
+        label.textContent = '已复制';
+        window.setTimeout(function () {
+          delete btn.dataset.state;
+          label.textContent = '复制提示词';
+        }, 1800);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, function () { /* 剪贴板不可用时保持原状 */ });
+      } else {
+        var range = document.createRange();
+        range.selectNodeContents(src);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
