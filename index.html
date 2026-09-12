@@ -238,12 +238,14 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .visual.has-image .visual-fallback{display:none}
 
 .hero-visual{
-  height:min(70vh,640px);
-  width:auto;
-  max-width:100%;
-  aspect-ratio:4/5;
-  justify-self:end;
+  width:100%;
+  aspect-ratio:3/2;
+  /* 素材原生 3:2（1536×1024），画框同比例，零裁切；底色贴合素材暗部 */
+  background-color:#121110;
+  background-image:none;
+  justify-self:stretch;
 }
+.hero-visual img{object-fit:cover}
 
 .visual-fallback{
   position:absolute;inset:0;
@@ -557,80 +559,6 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 }
 .cell-c5 p{margin-top:0;max-width:60ch}
 
-/* ---------- 06 概念视觉与提示词 ---------- */
-.visual-layout{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);
-  gap:28px;
-  align-items:start;
-}
-.visual-layout .visual{aspect-ratio:3/2}
-.prompt{
-  border:1px solid var(--line);
-  border-radius:var(--r);
-  background:var(--surface-2);
-  overflow:hidden;
-}
-.prompt-head{
-  display:flex;align-items:center;gap:14px;
-  padding:14px 18px;
-  border-bottom:1px solid var(--line);
-}
-.prompt-head .file{
-  font-family:var(--f-mono);
-  font-size:.6875rem;letter-spacing:.1em;
-  color:var(--ink-2);
-}
-.prompt-head .btn-copy{
-  margin-left:auto;
-  display:inline-flex;align-items:center;gap:8px;
-  height:32px;padding:0 14px;
-  border:1px solid var(--line-strong);
-  border-radius:var(--r);
-  font-family:var(--f-mono);
-  font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--ink-2);
-  transition:border-color .2s var(--ease),color .2s var(--ease),background-color .2s var(--ease);
-}
-.prompt-head .btn-copy:hover{border-color:var(--accent-line);color:var(--ink)}
-.prompt-head .btn-copy:active{transform:translateY(1px)}
-.prompt-head .btn-copy[data-state="done"]{
-  border-color:var(--accent-line);
-  background:var(--accent-wash);
-  color:var(--accent);
-}
-.prompt pre{
-  margin:0;
-  padding:20px 22px 24px;
-  font-family:var(--f-mono);
-  font-size:.8125rem;
-  line-height:1.85;
-  color:#b9c6c4;
-  white-space:pre-wrap;
-  word-break:break-word;
-  max-height:340px;
-  overflow:auto;
-}
-.prompt-notes{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:0;
-  margin-top:30px;
-  border-top:1px solid var(--line);
-}
-.prompt-notes > div{padding:18px 26px 0 0}
-.prompt-notes > div + div{border-left:1px solid var(--line);padding-left:26px}
-.prompt-notes dt{
-  font-family:var(--f-mono);
-  font-size:.625rem;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--ink-3);
-}
-.prompt-notes dd{
-  margin:8px 0 0;
-  font-size:.9375rem;
-  color:var(--ink-2);
-}
-
 /* ---------- 页脚 ---------- */
 .foot{
   border-top:1px solid var(--line);
@@ -686,7 +614,6 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   .section-grid{gap:40px}
   .hero-in{grid-template-columns:minmax(0,1fr) minmax(0,.82fr)}
   .hero-in{gap:48px}
-  .hero-visual{height:min(58vh,520px)}
 }
 
 @media (max-width:900px){
@@ -701,9 +628,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     gap:40px;
   }
   .hero-visual{
-    height:auto;
     width:100%;
-    aspect-ratio:4/5;
+    aspect-ratio:3/2;
     justify-self:stretch;
   }
 
@@ -729,9 +655,6 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     padding:0 12px;
   }
 
-  .visual-layout{grid-template-columns:minmax(0,1fr)}
-  .visual-layout .visual{aspect-ratio:4/3}
-
   .chain{
     grid-template-columns:minmax(0,1fr);
     gap:0;
@@ -743,15 +666,6 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   }
   .chain-step::before{display:none}
   .chain-step::after{top:30px;left:-3px}
-
-  .prompt-notes{grid-template-columns:minmax(0,1fr)}
-  .prompt-notes > div{padding:18px 0 0}
-  .prompt-notes > div + div{
-    border-left:0;
-    border-top:1px solid var(--line);
-    padding-left:0;
-    margin-top:18px;
-  }
 
   .cell,
   .cell-c1,.cell-c2,.cell-c3,.cell-c4,.cell-c5{grid-column:span 12}
@@ -791,7 +705,6 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       <a href="#positioning">产品定位</a>
       <a href="#vision">产品构想</a>
       <a href="#features">核心功能</a>
-      <a href="#visual">概念视觉</a>
     </nav>
   </div>
   <div class="progress" aria-hidden="true"></div>
@@ -814,12 +727,12 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       </div>
 
       <div class="visual hero-visual" data-visual data-reveal>
-        <img src="assets/lingxu-hero.jpg" alt="灵枢单体悬浮终端概念渲染图">
+        <img src="assets/wifi10.png" alt="Wi-Fi 10.0 生物感知场域概念图">
         <div class="visual-fallback">
-          <span class="visual-label">Concept Render</span>
+          <span class="visual-label">Wi-Fi 10.0</span>
           <span class="visual-spec">
-            概念渲染图待生成<br>
-            ASSET 4:5 / assets/lingxu-hero.jpg
+            概念图缺失<br>
+            assets/wifi10.png
           </span>
         </div>
       </div>
@@ -1010,60 +923,6 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     </div>
   </section>
 
-  <!-- ============ 06 概念视觉与提示词 ============ -->
-  <section class="section" id="visual">
-    <div class="shell section-grid">
-      <div class="rail" data-reveal>
-        <h2>概念视觉</h2>
-        <span class="rail-en">Concept &amp; Prompt</span>
-      </div>
-      <div class="body" style="max-width:none">
-        <span class="eyebrow" data-reveal>AI Render Prompt</span>
-        <p class="para" style="margin-top:18px" data-reveal>
-          以下提示词可直接用于 Midjourney、DALL·E 或方舟生图模型，用于生成终端与场景的概念渲染图。
-        </p>
-
-        <div class="visual-layout" style="margin-top:32px">
-          <div class="visual" data-visual data-reveal>
-            <img src="assets/lingxu-desk.jpg" alt="灵枢终端置于深色胡桃木书桌的场景概念渲染图">
-            <div class="visual-fallback">
-              <span class="visual-label">Scene Render</span>
-              <span class="visual-spec">
-                场景渲染图待生成<br>
-                ASSET 3:2 / assets/lingxu-desk.jpg
-              </span>
-            </div>
-          </div>
-
-          <div class="prompt" data-reveal>
-            <div class="prompt-head">
-              <span class="file">prompt.txt</span>
-              <button class="btn-copy" type="button" data-copy="#prompt-text">
-                <span data-copy-label>复制提示词</span>
-              </button>
-            </div>
-<pre id="prompt-text">A hyper-realistic futuristic tech product photography. A luxurious levitating single-unit terminal acting as a Wi-Fi 10.0 biological radar and BCI home hub. Placed on a premium dark walnut wood desk in a high-end minimalist study room. The terminal is a sleek, seamless titanium and obsidian floating geometric core, emitting a soft, subtle cyan holographic bioluminescent aura. No screens, no visible buttons, absolute smooth surface. Cinematic lighting, global illumination, 8k resolution, elegant, ultra-high net worth luxury aesthetic, cyberpunk meets Zen minimalism, architectural digest style. --ar 4:5 --v 6.0 --style raw</pre>
-          </div>
-        </div>
-
-        <dl class="prompt-notes" data-reveal>
-          <div>
-            <dt>画面主体</dt>
-            <dd>单体悬浮终端，无缝钛金属与黑曜石几何核心</dd>
-          </div>
-          <div>
-            <dt>使用场景</dt>
-            <dd>高端极简书房，深色胡桃木书桌</dd>
-          </div>
-          <div>
-            <dt>输出规格</dt>
-            <dd>4:5 竖幅，8K 级细节，青绿冷光氛围</dd>
-          </div>
-        </dl>
-      </div>
-    </div>
-  </section>
-
 </main>
 
 <!-- ============ 页脚 ============ -->
@@ -1078,7 +937,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         </svg>
         <b>灵枢 · 源核</b>
       </div>
-      <p>Wi-Fi 10.0 生物感知与脑机接口终端。本页为产品概念与商业方案说明，视觉部分为待生成占位。</p>
+      <p>Wi-Fi 10.0 生物感知与脑机接口终端。本页为产品概念与商业方案说明。</p>
     </div>
     <span class="mono">Neuro-Genesis / Wi-Fi 10.0</span>
   </div>
@@ -1143,32 +1002,6 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     sections.forEach(function (s) { navIo.observe(s); });
   }
 
-  /* 复制提示词 */
-  document.querySelectorAll('[data-copy]').forEach(function (btn) {
-    var label = btn.querySelector('[data-copy-label]');
-    btn.addEventListener('click', function () {
-      var src = document.querySelector(btn.dataset.copy);
-      if (!src) return;
-      var text = src.textContent.trim();
-      var done = function () {
-        btn.dataset.state = 'done';
-        label.textContent = '已复制';
-        window.setTimeout(function () {
-          delete btn.dataset.state;
-          label.textContent = '复制提示词';
-        }, 1800);
-      };
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(done, function () { /* 剪贴板不可用时保持原状 */ });
-      } else {
-        var range = document.createRange();
-        range.selectNodeContents(src);
-        var sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(range);
-      }
-    });
-  });
 })();
 </script>
 

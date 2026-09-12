@@ -25,6 +25,6 @@ bash deploy-github.sh
 | 文件 | 用途 |
 | --- | --- |
 | `index.html` | 页面本体，样式与脚本内联 |
-| `assets/` | 概念渲染图，放入 `lingxu-hero.jpg`（4:5）与 `lingxu-desk.jpg`（3:2）会自动替换占位 |
+| `assets/wifi10.png` | 首屏概念图（1536×1024，3:2），页面按同比例画框完整显示 |
 | `serve.sh` | 本地静态服务 + 临时公网隧道 |
 | `deploy-github.sh` | 一键上传 GitHub 并开启 Pages |
